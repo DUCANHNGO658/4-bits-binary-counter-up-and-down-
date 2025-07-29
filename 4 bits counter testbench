@@ -1,0 +1,35 @@
+`timescale 1ns / 1ps
+module binary_counter_tb;
+reg clk =0;
+reg enable, set, reset, up;
+reg [3:0] value;
+wire [3:0] count;
+
+binary_counter uut(
+.clk(clk),
+.enable(enable),
+.set(set),
+.reset(reset),
+.up(up),
+.value(value),
+.count(count)
+);
+
+//Set period is 10ns
+always #5 clk =~clk;
+initial begin
+// reset counter
+reset = 1; set=0; enable=0; up=1; value=5'd0;
+#10 reset = 0;
+//count up
+enable=1;up =1;
+#60;
+//set value
+enable =0; set=1; reset=0; up=1; value=5'd15;
+#10 set =0;
+//count down
+enable=1; up=0;
+#60;
+$finish;
+end
+endmodule
